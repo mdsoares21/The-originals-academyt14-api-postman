@@ -1,0 +1,699 @@
+{
+	"info": {
+		"_postman_id": "560b4bd5-3da3-4284-956a-972953ce177e",
+		"name": "04_Empresas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38850106",
+		"_collection_link": "https://qa3333-2476.postman.co/workspace/The_Originals~70d36707-a3b9-4d19-a9ac-9f047c0009b6/collection/38850106-560b4bd5-3da3-4284-956a-972953ce177e?action=share&source=collection_link&creator=38850106"
+	},
+	"item": [
+		{
+			"name": "Realizar_Login-Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//Salvar token ca vairal Global\r",
+							"pm.globals.set(\"tokenAdmin\", pm.response.json().token)\r",
+							"\r",
+							"pm.test(\"Welcome Message\", () => {\r",
+							"    pm.environment.set(\"msgAdmin\", pm.response.json().msg);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Verify token is valid\", function() {\r",
+							"    pm.expect(pm.response.json().token).to.exist;\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Verify ID Admin\", () => {\r",
+							"    pm.environment.set(\"IDAdmin\", pm.response.json().user._id);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"mail\": \"{{mailAdmin}}\",\r\n  \"password\": \"{{passAdmin}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-5-the-originals.qacoders.dev.br/api//login/",
+					"protocol": "https",
+					"host": [
+						"api-5-the-originals",
+						"qacoders",
+						"dev",
+						"br"
+					],
+					"path": [
+						"api",
+						"",
+						"login",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cadastro_Empresa",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Gerando massa de dados\r",
+							"pm.sendRequest({\r",
+							"    url: \"https://www.5devs.com.br/api/empresa\",\r",
+							"    method: 'GET',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/json'\r",
+							"    }\r",
+							"    }, function (err, res) {\r",
+							"    if (err) {\r",
+							"        console.log(err);\r",
+							"    } else {\r",
+							"        const jsonData = res.json();\r",
+							"        pm.environment.set(\"nomeEmpresa\", jsonData.razaoSocial);\r",
+							"        pm.environment.set(\"registro\", jsonData.cnpj);\r",
+							"        pm.environment.set(\"emailCompany\",jsonData.email);\r",
+							"         pm.environment.set(\"telefone\",jsonData.telefone);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"// Gerando massa de dados\r",
+							"pm.sendRequest({\r",
+							"    url: \"https://www.5devs.com.br/api/pessoa\",\r",
+							"    method: 'GET',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/json'\r",
+							"    }\r",
+							"    }, function (err, res) {\r",
+							"    if (err) {\r",
+							"        console.log(err);\r",
+							"    } else {\r",
+							"        const jsonData = res.json();\r",
+							"        pm.globals.set(\"nominho\", jsonData.nome);\r",
+							"        \r",
+							"    }\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"ID_Empresa\", pm.response.json().newCompany._id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Empresa criada com sucesso\", function () {\r",
+							"    pm.expect(pm.response.json().msg).to.be.eql(`Olá a companhia ${pm.environment.get('nomeEmpresa')} foi cadastrada com sucesso.`);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{tokenAdmin}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"corporateName\": \"{{nomeEmpresa}}\",\r\n  \"registerCompany\": \"{{registro}}\",\r\n  \"mail\": \"{{emailCompany}}\",\r\n  \"matriz\": \"Teste\",\r\n  \"responsibleContact\": \"{{nominho}}\",\r\n  \"telephone\": \"1254789645123\",\r\n  \"serviceDescription\": \"Testes\",\r\n  \"address\": [\r\n    {\r\n      \"zipCode\": \"04777001\",\r\n      \"city\": \"São Paulo\",\r\n      \"state\": \"SP\",\r\n      \"district\": \"Rua das Flores\",\r\n      \"street\": \"Avenida Interlagos\",\r\n      \"number\": \"0223654780\",\r\n      \"complement\": \"de 4503 ao fim - lado ímpar\",\r\n      \"country\": \"Brasil\"\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url_chips}}company/",
+					"host": [
+						"{{url_chips}}company"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cadastro_Empresa_100Caracter",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Gerando massa de dados\r",
+							"pm.sendRequest({\r",
+							"    url: \"https://www.5devs.com.br/api/empresa\",\r",
+							"    method: 'GET',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/json'\r",
+							"    }\r",
+							"    }, function (err, res) {\r",
+							"    if (err) {\r",
+							"        console.log(err);\r",
+							"    } else {\r",
+							"        const jsonData = res.json();\r",
+							"        pm.environment.set(\"nomeEmpresa\", jsonData.razaoSocial);\r",
+							"        pm.environment.set(\"registro\", jsonData.cnpj);\r",
+							"        pm.environment.set(\"emailCompany\",jsonData.email);\r",
+							"         pm.environment.set(\"telefone\",jsonData.telefone);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Msg de campo máximo de 100 caracteres\", () => {\r",
+							"    pm.expect(pm.response.json().error[0]).to.be.eql(`O campo 'Nome da empresa' deve ter no máximo 100 caracteres.`);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{tokenAdmin}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"corporateName\": \"Nome da Empresa com 100 Carateres. Nome da Empresa com 100 Carateres.  Nome da Empresa com 100 Carateres.\",\r\n  \"registerCompany\": \"{{registro}}\",\r\n  \"mail\": \"{{emailCompany}}\",\r\n  \"matriz\": \"Teste\",\r\n  \"responsibleContact\": \"{{nominho}}\",\r\n  \"telephone\": \"1254789645123\",\r\n  \"serviceDescription\": \"Testes\",\r\n  \"address\": [\r\n    {\r\n      \"zipCode\": \"04777001\",\r\n      \"city\": \"São Paulo\",\r\n      \"state\": \"SP\",\r\n      \"district\": \"Rua das Flores\",\r\n      \"street\": \"Avenida Interlagos\",\r\n      \"number\": \"0223654780\",\r\n      \"complement\": \"de 4503 ao fim - lado ímpar\",\r\n      \"country\": \"Brasil\"\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url_chips}}}}/company/",
+					"host": [
+						"{{url_chips}}}}"
+					],
+					"path": [
+						"company",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cadastro_Empresa_SemName Copy",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Gerando massa de dados\r",
+							"pm.sendRequest({\r",
+							"    url: \"https://www.5devs.com.br/api/empresa\",\r",
+							"    method: 'GET',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/json'\r",
+							"    }\r",
+							"    }, function (err, res) {\r",
+							"    if (err) {\r",
+							"        console.log(err);\r",
+							"    } else {\r",
+							"        const jsonData = res.json();\r",
+							"        pm.environment.set(\"nomeEmpresa\", jsonData.razaoSocial);\r",
+							"        pm.environment.set(\"registro\", jsonData.cnpj);\r",
+							"        pm.environment.set(\"emailCompany\",jsonData.email);\r",
+							"         pm.environment.set(\"telefone\",jsonData.telefone);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Msg de campo obrigatorio\", () => {\r",
+							"    pm.expect(pm.response.json().error[0]).to.be.eql(`O campo 'Nome da empresa' é obrigatório.`);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{tokenAdmin}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"corporateName\": \"\",\r\n  \"registerCompany\": \"{{registro}}\",\r\n  \"mail\": \"{{emailCompany}}\",\r\n  \"matriz\": \"Teste\",\r\n  \"responsibleContact\": \"{{nominho}}\",\r\n  \"telephone\": \"1254789645123\",\r\n  \"serviceDescription\": \"Testes\",\r\n  \"address\": [\r\n    {\r\n      \"zipCode\": \"04777001\",\r\n      \"city\": \"São Paulo\",\r\n      \"state\": \"SP\",\r\n      \"district\": \"Rua das Flores\",\r\n      \"street\": \"Avenida Interlagos\",\r\n      \"number\": \"0223654780\",\r\n      \"complement\": \"de 4503 ao fim - lado ímpar\",\r\n      \"country\": \"Brasil\"\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/company/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"company",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cadastro_Empresa_Sem_ContatoResposável",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Gerando massa de dados\r",
+							"pm.sendRequest({\r",
+							"    url: \"https://www.5devs.com.br/api/empresa\",\r",
+							"    method: 'GET',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/json'\r",
+							"    }\r",
+							"    }, function (err, res) {\r",
+							"    if (err) {\r",
+							"        console.log(err);\r",
+							"    } else {\r",
+							"        const jsonData = res.json();\r",
+							"        pm.environment.set(\"nomeEmpresa\", jsonData.razaoSocial);\r",
+							"        pm.environment.set(\"registro\", jsonData.cnpj);\r",
+							"        pm.environment.set(\"emailCompany\",jsonData.email);\r",
+							"         pm.environment.set(\"telefone\",jsonData.telefone);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Msg de campo obrigatorio\", () => {\r",
+							"    pm.expect(pm.response.json().error[0]).to.be.eql(`O campo 'Contado do Responsável' é obrigatório.`);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{tokenAdmin}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"corporateName\": \"{{nomeEmpresa}}\",\r\n  \"registerCompany\": \"{{registro}}\",\r\n  \"mail\": \"{{emailCompany}}\",\r\n  \"matriz\": \"Teste\",\r\n  \"responsibleContact\": \"\",\r\n  \"telephone\": \"1254789645123\",\r\n  \"serviceDescription\": \"Testes\",\r\n  \"address\": [\r\n    {\r\n      \"zipCode\": \"04777001\",\r\n      \"city\": \"São Paulo\",\r\n      \"state\": \"SP\",\r\n      \"district\": \"Rua das Flores\",\r\n      \"street\": \"Avenida Interlagos\",\r\n      \"number\": \"0223654780\",\r\n      \"complement\": \"de 4503 ao fim - lado ímpar\",\r\n      \"country\": \"Brasil\"\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/company/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"company",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Alterar_Dados_Endereço",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{tokenAdmin}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"address\": [\r\n    {\r\n      \"zipCode\": \"12345678\",\r\n      \"city\": \"Fortaleza\",\r\n      \"state\": \"CE\",\r\n      \"district\": \"Rua Coqueiros\",\r\n      \"street\": \"Avenida Mar\",\r\n      \"number\": \"223\",\r\n      \"complement\": \"Casa\",\r\n      \"country\": \"Brasil\"\r\n    }\r\n  ]\r\n}"
+				},
+				"url": {
+					"raw": "{{url_chips}}/company/address/{{ID_Empresa}}",
+					"host": [
+						"{{url_chips}}"
+					],
+					"path": [
+						"company",
+						"address",
+						"{{ID_Empresa}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Alterar_Dados_Empresa Copy",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{tokenAdmin}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"corporateName\": \"Teste do Michaelll\",\r\n  \"registerCompany\": \"{{registro}}\",\r\n  \"mail\": \"{{emailCompany}}\",\r\n  \"matriz\": \"Teste\",\r\n  \"responsibleContact\": \"{{nominho}},\r\n  \"telephone\": \"99999999999999\",\r\n  \"serviceDescription\": \"Testes\"\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/company/{{ID_Empresa}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"company",
+						"{{ID_Empresa}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://api-the-originals.qacoders.dev.br/api/company/687aeffa99d72ca4f7ac1382",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODVkMmY5ZTVmMDE1M2MyMjM1ZTViNTEiLCJmdWxsTmFtZSI6IlFhLUNvZGVycy1TWVNBRE1JTiIsIm1haWwiOiJzeXNhZG1pbkBxYWNvZGVycy5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCQyc0FJVzR0dGouR004TFhuOEJZV05PODZibHBnR0NLZ0lqUWRoeDFFRHg3cnhHTVNvcFRpcSIsImFjY2Vzc1Byb2ZpbGUiOiJTWVNBRE1JTiIsImNwZiI6IjExMTExMTExMTExIiwic3RhdHVzIjp0cnVlLCJhdWRpdCI6W3sicmVnaXN0ZXJlZEJ5Ijp7InVzZXJJZCI6IjExMTExMTExMTExMTExMTExMSIsInVzZXJMb2dpbiI6InN5c2FkbWluQHFhY29kZXJzLmNvbSJ9LCJyZWdpc3RyYXRpb25EYXRlIjoicXVpbnRhLWZlaXJhLCAyNi8wNi8yMDI1LCAwODozMTo0MSBCUlQiLCJyZWdpc3RyYXRpb25OdW1iZXIiOiIwMSIsImNvbXBhbnlJZCI6IlFhLkNvZGVycyIsIl9pZCI6IjY4NWQyZjllNWYwMTUzYzIyMzVlNWI1MiJ9XSwiX192IjowLCJpYXQiOjE3NTI4ODc0MTgsImV4cCI6MTc1Mjk3MzgxOH0.OZdlteRKmFRXn8JdqU3HTqJrjq0m9Zel1Oh_67C7zN8"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"corporateName\": \"Teste do Michaell\",\r\n  \"registerCompany\": \"12126456000155\",\r\n  \"mail\": \"test@test.com\",\r\n  \"matriz\": \"Teste\",\r\n  \"responsibleContact\": \"{{nominho}}\",\r\n  \"telephone\": \"99999999999999\",\r\n  \"serviceDescription\": \"Testes\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-the-originals.qacoders.dev.br/api/company/{{ID_Empresa}}",
+					"protocol": "https",
+					"host": [
+						"api-the-originals",
+						"qacoders",
+						"dev",
+						"br"
+					],
+					"path": [
+						"api",
+						"company",
+						"{{ID_Empresa}}"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'PUT' \\\r\n  'https://api-the-originals.qacoders.dev.br/api/company/687aeffa99d72ca4f7ac1382' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODVkMmY5ZTVmMDE1M2MyMjM1ZTViNTEiLCJmdWxsTmFtZSI6IlFhLUNvZGVycy1TWVNBRE1JTiIsIm1haWwiOiJzeXNhZG1pbkBxYWNvZGVycy5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCQyc0FJVzR0dGouR004TFhuOEJZV05PODZibHBnR0NLZ0lqUWRoeDFFRHg3cnhHTVNvcFRpcSIsImFjY2Vzc1Byb2ZpbGUiOiJTWVNBRE1JTiIsImNwZiI6IjExMTExMTExMTExIiwic3RhdHVzIjp0cnVlLCJhdWRpdCI6W3sicmVnaXN0ZXJlZEJ5Ijp7InVzZXJJZCI6IjExMTExMTExMTExMTExMTExMSIsInVzZXJMb2dpbiI6InN5c2FkbWluQHFhY29kZXJzLmNvbSJ9LCJyZWdpc3RyYXRpb25EYXRlIjoicXVpbnRhLWZlaXJhLCAyNi8wNi8yMDI1LCAwODozMTo0MSBCUlQiLCJyZWdpc3RyYXRpb25OdW1iZXIiOiIwMSIsImNvbXBhbnlJZCI6IlFhLkNvZGVycyIsIl9pZCI6IjY4NWQyZjllNWYwMTUzYzIyMzVlNWI1MiJ9XSwiX192IjowLCJpYXQiOjE3NTI4ODc0MTgsImV4cCI6MTc1Mjk3MzgxOH0.OZdlteRKmFRXn8JdqU3HTqJrjq0m9Zel1Oh_67C7zN8' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"corporateName\": \"Teste do Michael\",\r\n  \"registerCompany\": \"12126456000155\",\r\n  \"mail\": \"test@test.com\",\r\n  \"matriz\": \"Teste\",\r\n  \"responsibleContact\": \"Michael Soares\",\r\n  \"telephone\": \"99999999999999\",\r\n  \"serviceDescription\": \"Testes\"\r\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "Consultar_Company",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{tokenAdmin}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/company/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"company",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Consultar_Quantidade_Company",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{tokenAdmin}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/company/count",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"company",
+						"count"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deletar_Emprea",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mensagem de deletar empresa\",() => {\r",
+							"    pm.expect(pm.response.json().msg).to.be.eql('Companhia deletado com sucesso.')\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"// pm.test(\"Empresa criada com sucesso\", function () {\r",
+							"//     pm.expect(pm.response.json().msg).to.be.eql(`Olá a companhia ${pm.environment.get('nomeEmpresa')} foi cadastrada com sucesso.`);\r",
+							"// });"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{tokenAdmin}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"corporateName\": \"{{nomeEmpresa}}\",\r\n  \"registerCompany\": \"{{registro}}\",\r\n  \"mail\": \"{{emailCompany}}\",\r\n  \"matriz\": \"Teste\",\r\n  \"responsibleContact\": \"{{nominho}}\",\r\n  \"telephone\": \"1254789645123\",\r\n  \"serviceDescription\": \"Testes\",\r\n  \"address\": [\r\n    {\r\n      \"zipCode\": \"04777001\",\r\n      \"city\": \"São Paulo\",\r\n      \"state\": \"SP\",\r\n      \"district\": \"Rua das Flores\",\r\n      \"street\": \"Avenida Interlagos\",\r\n      \"number\": \"0223654780\",\r\n      \"complement\": \"de 4503 ao fim - lado ímpar\",\r\n      \"country\": \"Brasil\"\r\n    }\r\n  ]\r\n}"
+				},
+				"url": {
+					"raw": "https://api-4-the-originals.qacoders.dev.br/api/company/{{ID_Empresa}}",
+					"protocol": "https",
+					"host": [
+						"api-4-the-originals",
+						"qacoders",
+						"dev",
+						"br"
+					],
+					"path": [
+						"api",
+						"company",
+						"{{ID_Empresa}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "in",
+				"value": "header",
+				"type": "string"
+			},
+			{
+				"key": "value",
+				"value": "{{tokenAdmin}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "Autorization",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
