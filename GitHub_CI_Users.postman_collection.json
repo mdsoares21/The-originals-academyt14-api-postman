@@ -1,0 +1,501 @@
+{
+	"info": {
+		"_postman_id": "c3cf2ccd-daf3-4395-a1ed-b0dda0ea9437",
+		"name": "03_User",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38850106",
+		"_collection_link": "https://qa3333-2476.postman.co/workspace/The_Originals~70d36707-a3b9-4d19-a9ac-9f047c0009b6/collection/38850106-c3cf2ccd-daf3-4395-a1ed-b0dda0ea9437?action=share&source=collection_link&creator=38850106"
+	},
+	"item": [
+		{
+			"name": "Realizar_Login-Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//Salvar token ca vairal Global\r",
+							"pm.globals.set(\"tokenAdmin\", pm.response.json().token)\r",
+							"\r",
+							"pm.test(\"Welcome Message\", () => {\r",
+							"    pm.environment.set(\"msgAdmin\", pm.response.json().msg);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Verify token is valid\", function() {\r",
+							"    pm.expect(pm.response.json().token).to.exist;\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Verify ID Admin\", () => {\r",
+							"    pm.environment.set(\"IDAdmin\", pm.response.json().user._id);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"mail\": \"{{mailAdmin}}\",\r\n  \"password\": \"{{passAdmin}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/login/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"login",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Criar_Usuário",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Gerando massa de dados\r",
+							"pm.sendRequest({\r",
+							"    url: \"https://www.5devs.com.br/api/pessoa\",\r",
+							"    method: 'GET',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/json'\r",
+							"    }\r",
+							"    }, function (err, res) {\r",
+							"    if (err) {\r",
+							"        console.log(err);\r",
+							"    } else {\r",
+							"        const jsonData = res.json();\r",
+							"        pm.globals.set(\"nominho\", jsonData.nome);\r",
+							"        pm.globals.set(\"mailzinho\", jsonData.email);\r",
+							"        pm.globals.set(\"CPFzinho\",jsonData.cpf);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"//Validar Mensagem de usuário criado com sucesso.\r",
+							"// pm.test(\"Usuário criado com sucesso\", function () {\r",
+							"//    pm.expect(pm.response.json().msg).to.be.eql(`Olá ${pm.globals.get('nominho')}, cadastro realizado com sucesso.);\r",
+							"\r",
+							"//Salvar ID do usuário\r",
+							"pm.environment.set(\"ID\", pm.response.json().user._id);\r",
+							"\r",
+							"//Validando mensagem de usuário criado com sucesso.\r",
+							"pm.test(\"Usuário criado com sucesso\", function () {\r",
+							"    pm.expect(pm.response.json().msg).to.be.eql(`Olá ${pm.globals.get('nominho')}, cadastro realizado com sucesso.`);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{tokenAdmin}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"fullName\": \"{{nominho}}\",\r\n  \"mail\": \"{{mailzinho}}\",\r\n  \"accessProfile\": \"ADMIN\",\r\n  \"cpf\": \"{{CPFzinho}}\",\r\n  \"password\": \"{{passAdmin}}\",\r\n  \"confirmPassword\": \"{{passAdmin}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/user/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Realizar_Login_Teste",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//Salvar token ca vairal Global\r",
+							"pm.globals.set(\"Token_User\", pm.response.json().token)\r",
+							"\r",
+							"//Validar mensagem de boas vindas\r",
+							"pm.test(\"Msg de boas vindas\", function () {\r",
+							"    pm.expect(pm.response.json().msg).to.be.eql(`Olá ${pm.globals.get('nominho')}, autenticação autorizada com sucesso!`);\r",
+							"});\r",
+							"\r",
+							"//Verificar sem possui TOKEN\r",
+							"pm.test(\"Verificar se existem TOKEN\", function() {\r",
+							"    pm.expect(pm.response.json().token).to.exist;\r",
+							"})\r",
+							"\r",
+							"// pm.test(\"Verify ID Admin\", () => {\r",
+							"//     pm.environment.set(\"IDAdmin\", pm.response.json().user._id);\r",
+							"// })"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"mail\": \"{{mailzinho}}\",\r\n  \"password\": \"{{passAdmin}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/login/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"login",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar_Usuários",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{tokenAdmin}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"mail\": \"sysadmin@qacoders.com\",\r\n  \"password\": \"{{passAdmin}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/user/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pesquisar_User_ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/user/{{ID}}?token={{tokenAdmin}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user",
+						"{{ID}}"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "{{tokenAdmin}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Alterar_Usuário",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Usuário atualizado com sucesso\", function () {\r",
+							"    pm.expect(pm.response.json().msg).to.be.eql(`Dados atualizados com sucesso!`);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token_User}}",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{tokenAdmin}}",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"fullName\": \"{{nominho}}\",\r\n  \"mail\": \"tiago_gomes22@globo.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/user/{{ID}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user",
+						"{{ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deletar_Usuário_Token_Inválido",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Msg de token inválido\", function () {\r",
+							"    pm.expect(pm.response.json().errors[0]).to.be.eql(`Failed to authenticate token.`);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 403\", function () {\r",
+							"    pm.response.to.have.status(403);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODZkYWJkMTk5ZDcyY2E0ZjdhYmVlZGEiLCJmdWxsTmFtZSI6Ik9sw612aWEgTWVuZGVzIiwibWFpbCI6Im9saXZpYV9tZW5kZXNAdW9sLmNvbS5iciIsInBhc3N3b3JkIjoiJDJiJDEwJDdDZ245aGpxL0NFOGJObkZIdFhnZHVEeVV1aDVnN2loRTVYUjhZUzdYaGdQTm1KM0JRMUdhIiwiYWNjZXNzUHJvZmlsZSI6IkFETUlOIiwiY3BmIjoiMzQzNDYxNDY3MjQiLCJzdGF0dXMiOnRydWUsImF1ZGl0IjpbeyJyZWdpc3RlcmVkQnkiOnsidXNlcklkIjoiNjg1OTg5YTgxNGRkNWE3ZTRkODU3MGRlIiwidXNlckxvZ2luIjoic3lzYWRtaW5AcWFjb2RlcnMuY29tIn0sInJlZ2lzdHJhdGlvbkRhdGUiOiJ0ZXLDp2EtZmVpcmEsIDA4LzA3LzIwMjUsIDIwOjM3OjUyIEJSVCIsInJlZ2lzdHJhdGlvbk51bWJlciI6IlFhQ29kZXJzLTgzIiwiX2lkIjoiNjg2ZGFiZDE5OWQ3MmNhNGY3YWJlZWRiIn1dLCJfX3YiOjAsImlhdCI6MTc1MjAxNzg3NywiZXhwIjoxNzUyMTA0Mjc3fQ.XsGiIzOQz3OL9nP6FwcuCVJujONc8v4aLDo4lZE3OJQ",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/user/{{ID}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user",
+						"{{ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deletar_Usuário",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Msg de usuário deletado\", function () {\r",
+							"    pm.expect(pm.response.json().msg).to.be.eql(`Usuário deletado com sucesso!.`);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{tokenAdmin}}",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{Token_User}}",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{url}}/user/{{ID}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user",
+						"{{ID}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "in",
+				"value": "header",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "Autorization",
+				"type": "string"
+			},
+			{
+				"key": "value",
+				"value": "{{tokenAdmin}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

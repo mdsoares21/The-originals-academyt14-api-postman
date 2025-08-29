@@ -1,0 +1,63 @@
+{
+	"id": "bfa75895-8437-41d0-8e53-ec7c4ddf3282",
+	"values": [
+		{
+			"key": "url",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "tokenAdmin",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "nominho",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "mailzinho",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "Nome",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "Nome_API",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "CPFzinho",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "Token_User",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "url_chips",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"name": "Globals",
+	"_postman_variable_scope": "globals",
+	"_postman_exported_at": "2025-08-29T23:35:37.908Z",
+	"_postman_exported_using": "Postman/11.59.2"
+}
