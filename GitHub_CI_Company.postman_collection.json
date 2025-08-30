@@ -52,9 +52,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/login/",
+					"raw": "{{baseUrl}}/login/",
 					"host": [
-						"{{url}}"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"login",
@@ -151,11 +151,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}company/",
+					"raw": "{{baseUrl}}/company/",
 					"host": [
-						"{{url}}company"
+						"{{baseUrl}}"
 					],
 					"path": [
+						"company",
 						""
 					]
 				}
@@ -231,9 +232,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/company/",
+					"raw": "{{baseUrl}}/company/",
 					"host": [
-						"{{url}}"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"company",
@@ -312,9 +313,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/company/",
+					"raw": "{{baseUrl}}/company/",
 					"host": [
-						"{{url}}"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"company",
@@ -393,9 +394,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/company/",
+					"raw": "{{baseUrl}}/company/",
 					"host": [
-						"{{url}}"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"company",
@@ -431,9 +432,9 @@
 					"raw": "{\r\n  \"address\": [\r\n    {\r\n      \"zipCode\": \"04777001\",\r\n      \"city\": \"São Paulo\",\r\n      \"state\": \"SP\",\r\n      \"district\": \"Rua das Flores\",\r\n      \"street\": \"Avenida Interlagos\",\r\n      \"number\": \"50\",\r\n      \"complement\": \"de 4503 ao fim - lado ímpar\",\r\n      \"country\": \"Brasil\"\r\n    }\r\n  ]\r\n}"
 				},
 				"url": {
-					"raw": "{{url}}/company/address/{{ID_Empresa}}",
+					"raw": "{{baseUrl}}/company/address/{{ID_Empresa}}",
 					"host": [
-						"{{url}}"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"company",
@@ -441,53 +442,6 @@
 						"{{ID_Empresa}}"
 					]
 				}
-			},
-			"response": []
-		},
-		{
-			"name": "Alterar_Empresa_False",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "accept",
-						"value": "application/json"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODVkMmY5ZTVmMDE1M2MyMjM1ZTViNTEiLCJmdWxsTmFtZSI6IlFhLUNvZGVycy1TWVNBRE1JTiIsIm1haWwiOiJzeXNhZG1pbkBxYWNvZGVycy5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCQyc0FJVzR0dGouR004TFhuOEJZV05PODZibHBnR0NLZ0lqUWRoeDFFRHg3cnhHTVNvcFRpcSIsImFjY2Vzc1Byb2ZpbGUiOiJTWVNBRE1JTiIsImNwZiI6IjExMTExMTExMTExIiwic3RhdHVzIjp0cnVlLCJhdWRpdCI6W3sicmVnaXN0ZXJlZEJ5Ijp7InVzZXJJZCI6IjExMTExMTExMTExMTExMTExMSIsInVzZXJMb2dpbiI6InN5c2FkbWluQHFhY29kZXJzLmNvbSJ9LCJyZWdpc3RyYXRpb25EYXRlIjoicXVpbnRhLWZlaXJhLCAyNi8wNi8yMDI1LCAwODozMTo0MSBCUlQiLCJyZWdpc3RyYXRpb25OdW1iZXIiOiIwMSIsImNvbXBhbnlJZCI6IlFhLkNvZGVycyIsIl9pZCI6IjY4NWQyZjllNWYwMTUzYzIyMzVlNWI1MiJ9XSwiX192IjowLCJpYXQiOjE3NTI4ODc0MTgsImV4cCI6MTc1Mjk3MzgxOH0.OZdlteRKmFRXn8JdqU3HTqJrjq0m9Zel1Oh_67C7zN8"
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					},
-					{
-						"key": "Authorization",
-						"value": "{{tokenAdmin}}",
-						"type": "text",
-						"disabled": true
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"status\": false\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{url}}company/status/{{ID_Empresa}}",
-					"host": [
-						"{{url}}company"
-					],
-					"path": [
-						"status",
-						"{{ID_Empresa}}"
-					]
-				},
-				"description": "Generated from cURL: curl -X 'PUT' \\\r\n  'https://api-the-originals.qacoders.dev.br/api/company/687aeffa99d72ca4f7ac1382' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODVkMmY5ZTVmMDE1M2MyMjM1ZTViNTEiLCJmdWxsTmFtZSI6IlFhLUNvZGVycy1TWVNBRE1JTiIsIm1haWwiOiJzeXNhZG1pbkBxYWNvZGVycy5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCQyc0FJVzR0dGouR004TFhuOEJZV05PODZibHBnR0NLZ0lqUWRoeDFFRHg3cnhHTVNvcFRpcSIsImFjY2Vzc1Byb2ZpbGUiOiJTWVNBRE1JTiIsImNwZiI6IjExMTExMTExMTExIiwic3RhdHVzIjp0cnVlLCJhdWRpdCI6W3sicmVnaXN0ZXJlZEJ5Ijp7InVzZXJJZCI6IjExMTExMTExMTExMTExMTExMSIsInVzZXJMb2dpbiI6InN5c2FkbWluQHFhY29kZXJzLmNvbSJ9LCJyZWdpc3RyYXRpb25EYXRlIjoicXVpbnRhLWZlaXJhLCAyNi8wNi8yMDI1LCAwODozMTo0MSBCUlQiLCJyZWdpc3RyYXRpb25OdW1iZXIiOiIwMSIsImNvbXBhbnlJZCI6IlFhLkNvZGVycyIsIl9pZCI6IjY4NWQyZjllNWYwMTUzYzIyMzVlNWI1MiJ9XSwiX192IjowLCJpYXQiOjE3NTI4ODc0MTgsImV4cCI6MTc1Mjk3MzgxOH0.OZdlteRKmFRXn8JdqU3HTqJrjq0m9Zel1Oh_67C7zN8' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"corporateName\": \"Teste do Michael\",\r\n  \"registerCompany\": \"12126456000155\",\r\n  \"mail\": \"test@test.com\",\r\n  \"matriz\": \"Teste\",\r\n  \"responsibleContact\": \"Michael Soares\",\r\n  \"telephone\": \"99999999999999\",\r\n  \"serviceDescription\": \"Testes\"\r\n}'"
 			},
 			"response": []
 		},
@@ -510,9 +464,9 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "{{url}}/company/",
+					"raw": "{{baseUrl}}/company/",
 					"host": [
-						"{{url}}"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"company",
@@ -541,9 +495,9 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "{{url}}/company/count",
+					"raw": "{{baseUrl}}/company/count",
 					"host": [
-						"{{url}}"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"company",
@@ -593,9 +547,9 @@
 					"raw": "{\r\n  \"corporateName\": \"{{nomeEmpresa}}\",\r\n  \"registerCompany\": \"{{registro}}\",\r\n  \"mail\": \"{{emailCompany}}\",\r\n  \"matriz\": \"Teste\",\r\n  \"responsibleContact\": \"{{nominho}}\",\r\n  \"telephone\": \"1254789645123\",\r\n  \"serviceDescription\": \"Testes\",\r\n  \"address\": [\r\n    {\r\n      \"zipCode\": \"04777001\",\r\n      \"city\": \"São Paulo\",\r\n      \"state\": \"SP\",\r\n      \"district\": \"Rua das Flores\",\r\n      \"street\": \"Avenida Interlagos\",\r\n      \"number\": \"0223654780\",\r\n      \"complement\": \"de 4503 ao fim - lado ímpar\",\r\n      \"country\": \"Brasil\"\r\n    }\r\n  ]\r\n}"
 				},
 				"url": {
-					"raw": "{{url}}/company/{{ID_Empresa}}",
+					"raw": "{{baseUrl}}/company/{{ID_Empresa}}",
 					"host": [
-						"{{url}}"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"company",

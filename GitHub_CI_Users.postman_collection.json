@@ -52,9 +52,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/login/",
+					"raw": "{{baseUrl}}/login/",
 					"host": [
-						"{{url}}"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"login",
@@ -139,9 +139,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/user/",
+					"raw": "{{baseUrl}}/user/",
 					"host": [
-						"{{url}}"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"user",
@@ -244,9 +244,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/user/",
+					"raw": "{{baseUrl}}/user/",
 					"host": [
-						"{{url}}"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"user",
@@ -262,9 +262,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/user/{{ID}}?token={{tokenAdmin}}",
+					"raw": "{{baseUrl}}/user/{{ID}}?token={{tokenAdmin}}",
 					"host": [
-						"{{url}}"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"user",
@@ -325,9 +325,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/user/{{ID}}",
+					"raw": "{{baseUrl}}/user/{{ID}}",
 					"host": [
-						"{{url}}"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"user",
@@ -381,9 +381,9 @@
 					}
 				],
 				"url": {
-					"raw": "{{url}}/user/{{ID}}",
+					"raw": "{{baseUrl}}/user/{{ID}}",
 					"host": [
-						"{{url}}"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"user",
@@ -443,9 +443,9 @@
 					}
 				],
 				"url": {
-					"raw": "{{url}}/user/{{ID}}",
+					"raw": "{{baseUrl}}/user/{{ID}}",
 					"host": [
-						"{{url}}"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"user",
