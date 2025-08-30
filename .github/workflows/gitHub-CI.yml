@@ -40,14 +40,22 @@ jobs:
       - name: Garantir diretório do relatório
         run: mkdir -p ./postman/newman
 
-      - name: Step 3 Execute Postman Collections
+      - name: Step 3 Execute Postman Collection
         run: |
-          set +e
-          newman run ../The-originals-academyt14-api-postman/GitHub_CI_Users.postman_collection.json -g ../The-originals-academyt14-api-postman/GitHub_CI_postman_globals.json -e ../The-originals-academyt14-api-postman/GitHub_CI_postman_environment.json -r cli,htmlextra --reporter-htmlextra-export ../postman/newman/report/users.html
-          newman run ../The-originals-academyt14-api-postman/GitHub_CI_Company.postman_collection.json -g ../The-originals-academyt14-api-postman/GitHub_CI_postman_globals.json -e ../The-originals-academyt14-api-postman/GitHub_CI_postman_environment.json -r cli,htmlextra --reporter-htmlextra-export ../postman/newman/report/company.html
+          newman run ../The-originals-academyt14-api-postman/GitHub_CI_Users.postman_collection.json -g ../The-originals-academyt14-api-postman/GitHub_CI_postman_globals.json -e ../The-originals-academyt14-api-postman/GitHub_CI_postman_environment.json -r cli,htmlextra --reporter-htmlextra-export ./postman/newman/report.html
 
-      - name: Step 4 Archive prodution artifacts
+      - name: Step 4 Archive prodution artifact
         uses: actions/upload-artifact@v4
         with:
-          name: reports
-          path: ./postman/newman/
+          name: report
+          path: ./postman/newman/report.html
+
+      - name: Debug - Listar arquivos e mostrar variáveis
+        run: |
+          ls -l ./The-originals-academyt14-api-postman/
+          cat ./The-originals-academyt14-api-postman/GitHub_CI_postman_environment.json
+          cat ./The-originals-academyt14-api-postman/GitHub_CI_postman_globals.json
+
+      - name: Debug - Mostrar valor da variável baseUrl
+        run: |
+          cat ./The-originals-academyt14-api-postman/GitHub_CI_postman_environment.json | grep -i baseUrl
