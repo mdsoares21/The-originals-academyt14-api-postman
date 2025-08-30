@@ -58,4 +58,4 @@ jobs:
 
       - name: Debug - Mostrar valor da variável url
         run: |
-          cat ./The-originals-academyt14-api-postman/GitHub_CI_postman_environment.json | grep -i url
+          cat ./The-originals-academyt14-api-postman/GitHub_CI_postman_globals.json | grep -i url
